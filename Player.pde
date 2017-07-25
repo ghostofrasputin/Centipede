@@ -1,12 +1,13 @@
 
 class Player {
   private int x, y, size, speed;
+  private boolean rightFlag, leftFlag;
   
   Player(int x, int y){
     this.x = x;
     this.y = y;
     this.size = 10;
-    this.speed = 10;
+    this.speed = 5;
   }
   
   void display(){
@@ -14,20 +15,19 @@ class Player {
   }
   
   void update(){
-    if(keyPressed){
-      // west
-      if(key == 'a' || key == 'A'){
-        x-=speed;
-      }
-      // east
-      if(key == 'd' || key == 'D'){
-        x+=speed;
-      } 
+    // left
+    if(keys[0]){
+      x-=speed;
     }
+    // right
+    if(keys[1]){
+      x+=speed;
+    } 
     
   }
   
   private void drawSprite(){
+    fill(255);
     rect(x,y,size,size);
   }
     
