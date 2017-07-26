@@ -1,4 +1,7 @@
-  
+//----------------------------------------------------------
+// Player class
+//---------------------------------------------------------- 
+
 class Player {
   private int x, y, size, speed;
   private boolean rightFlag, leftFlag;
