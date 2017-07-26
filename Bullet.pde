@@ -2,7 +2,7 @@
 
 class Bullet{
   private int x,y,w,h,speed;
-  ArrayList collisionInfo;
+  int[] collisionInfo;
   
   Bullet(int x, int y){
     this.x=x;
@@ -10,7 +10,7 @@ class Bullet{
     this.w = 5;
     this.h = 10;
     this.speed = 12;
-    collisionInfo = new ArrayList();
+    collisionInfo = new int[]{x,y,w,h};
   }
   
   void display(){
@@ -20,6 +20,6 @@ class Bullet{
   
   void update(){
     y-=speed;
-    collisionInfo.addAll(Arrays.asList(x,y,w,h));
+    collisionInfo = new int[]{x,y,w,h};
   }
 }

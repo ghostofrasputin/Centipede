@@ -2,19 +2,23 @@
 
 class Mushroom {
   private int x, y;
-  private int hits;
+  private int hit;
+  private int lastHit;
+  private int[] currentCollisionInfo;
   
   Mushroom(int x, int y){
     this.x = x;
     this.y = y;
-    this.hits = 0;
+    this.hit = 0;
+    this.lastHit = -1;
+    currentCollisionInfo = new int[4];
   }
   
   void display(){
     // it takes 4 hits to destroy a mushroom
     stroke(atomic_blue);
     strokeWeight(3);
-    switch(hits){
+    switch(hit){
       case 0:
         fill(atomic_purple);
         arc(x, y, 15, 15, PI, TWO_PI);
@@ -25,7 +29,7 @@ class Mushroom {
       case 1:
         fill(atomic_purple);
         arc(x, y, 15, 15, PI, TWO_PI);
-        rect(x-3,y,5,7);
+        //rect(x-3,y,5,7);
         fill(atomic_blue);
         line(x-7,y,x+7,y);
         break;
@@ -37,27 +41,46 @@ class Mushroom {
         break;
        
     }
-    noStroke();  
+    noStroke();
   }
   
   void update(){
-    // check for bullet/mushroom collision
-    switch(hits){
+    //update collision info once when there's a hit
+    switch(hit){
       case 0:
+        updateCollisionInfo(new int[]{x-3,y,5,7});
         break;
       case 1:
+        updateCollisionInfo(new int[]{x, y, 15, 15});
         break;
       case 2:
+       // updateCollisionInfo();
         break;
       case 3:
-        break;
-      // mushroom is destroyed:
-      case 4:
-        mushrooms.remove(this);
+        //updateCollisionInfo();
         break;
       default:
         break;
-       
+     }
+    lastHit = hit;
+  }
+  
+  // this is to make sure the collision info is only
+  // updated once, not every time it's called
+  void updateCollisionInfo(int[] info){
+    if(hit==lastHit) {
+      return;
+    } else {
+      currentCollisionInfo = new int[] {info[0],info[1],info[2],info[3]};
+    }
+  }
+  
+  boolean bulletCollision(Bullet b){
+    if(rectCollision(b.collisionInfo, currentCollisionInfo)){
+      hit++;
+      return true;
+    } else {
+      return false;
     }
   }
     

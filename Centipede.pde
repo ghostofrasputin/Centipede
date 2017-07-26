@@ -1,5 +1,5 @@
 /***********************************************************
- * Program: Atari's Centipede remake project               *
+ * Program: Atari's Centipede (clone)                      *
  * Author: Jacob Preston                                   *
  *                                                         *
  * Instructions:                                           *
@@ -14,11 +14,11 @@ import java.util.Arrays;
 // Global variables
 //----------------------------------------------------------
 boolean[] keys = {false, false, false};
-Player humanoid = new Player(200,750);
+Player cannon = new Player(200,750);
 ArrayList<Bullet> bullets = new ArrayList<Bullet>();
 ArrayList<Mushroom> mushrooms = new ArrayList<Mushroom>();
 
-int fc = 0;
+int bulletPause = 0;
 int levelNum = 0;
 int progress = 1;
 
@@ -40,36 +40,48 @@ void setup(){
 //---------------------------------------------------------- 
 void draw(){
   background(0);
-  
   if(levelNum < progress){
     generateMushrooms();
     levelNum++;
   }
   
-  
-  
-  if(keys[2] && frameCount>fc+30){
-    Bullet b = new Bullet(humanoid.x,humanoid.y);
-    //b.display();
-    //b.update();
+  // fires bullets and maintains bullet spacing,
+  // only 1-3 bullets on screen at a time
+  if(keys[2] && frameCount>bulletPause+30){
+    Bullet b = new Bullet(cannon.x,cannon.y);
     bullets.add(b);
-    fc = frameCount;
+    //print(bullets.get(0).collisionInfo[1]);
+    bulletPause = frameCount;
   }
   
   for(int i=0; i<bullets.size();i++){
-    Bullet temp = bullets.get(i);
-    temp.display();
-    temp.update();
+    Bullet b = bullets.get(i);
+    // clean up bullets that go off screen
+    if(b.y<0){
+      bullets.remove(i);
+    } else {
+      b.display();
+      b.update();
+    }
   }
   
   for(int i=0; i<mushrooms.size();i++){
-    Mushroom temp = mushrooms.get(i);
-    temp.display();
-    temp.update();
+    Mushroom m = mushrooms.get(i);
+    for(int j=0; j<bullets.size(); j++){
+      Bullet b = bullets.get(j);
+      if(m.bulletCollision(b)){
+        bullets.remove(j);
+        if(m.hit==2){
+          mushrooms.remove(i);
+        }
+      }
+    }
+    m.display();
+    m.update();
   }
   
-  humanoid.display();
-  humanoid.update();
+  cannon.display();
+  cannon.update();
 }
 
 //----------------------------------------------------------
@@ -118,7 +130,8 @@ void generateMushrooms(){
   }
 }
 
-// True if there's a collision, else False
+// rectangle collision check
+// true if there's a collision, else false
 boolean rectCollision(int[]rect1 ,int[] rect2){
   // rect 1
   int minX = rect1[0];
