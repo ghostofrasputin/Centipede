@@ -1,4 +1,4 @@
-
+  
 class Player {
   private int x, y, size, speed;
   private boolean rightFlag, leftFlag;
@@ -16,14 +16,13 @@ class Player {
   
   void update(){
     // left
-    if(keys[0]){
+    if(keys[0] && x>=5){
       x-=speed;
     }
     // right
-    if(keys[1]){
+    if(keys[1] && x<=width-15){
       x+=speed;
     } 
-    
   }
   
   private void drawSprite(){
