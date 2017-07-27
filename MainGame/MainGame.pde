@@ -12,9 +12,11 @@
 // Global variables
 //----------------------------------------------------------
 boolean[] keys = {false, false, false};
+boolean[][] grid = new boolean[39][35];
 Player cannon = new Player(200,750);
 ArrayList<Bullet> bullets = new ArrayList<Bullet>();
-ArrayList<Mushroom> mushrooms = new ArrayList<Mushroom>();
+ArrayList<Mushroom> shrooms = new ArrayList<Mushroom>();
+ArrayList<Centipede> centipedes = new ArrayList<Centipede>();
 
 int bulletPause = 0;
 int levelNum = 0;
@@ -22,9 +24,9 @@ int progress = 1;
 
 // Colors:
 //color red = 
-color atomic_blue = #0cb6f4;
+color atomic_blue = #0CB6F4;
 color atomic_purple = #FE08FF;
-
+color atomic_orange = #FF8C1F;
 
 //----------------------------------------------------------
 // Setup Function
@@ -39,13 +41,21 @@ void setup(){
 void draw(){
   background(0);
   if(levelNum < progress){
-    generateMushrooms();
+    Centipede enemy = new Centipede(10);
+    centipedes.add(enemy);
+    generateshrooms();
     levelNum++;
+  }
+  
+  for(int i=0; i<centipedes.size(); i++){
+    Centipede c = centipedes.get(i);
+    c.display();
+    c.update();
   }
   
   // fires bullets and maintains bullet spacing,
   // only 1-3 bullets on screen at a time
-  if(keys[2] && frameCount>bulletPause+30){
+  if(keys[2] && frameCount>bulletPause+15){
     Bullet b = new Bullet(cannon.x,cannon.y);
     bullets.add(b);
     //print(bullets.get(0).collisionInfo[1]);
@@ -63,19 +73,24 @@ void draw(){
     }
   }
   
-  for(int i=0; i<mushrooms.size();i++){
-    Mushroom m = mushrooms.get(i);
+  ArrayList<Mushroom>destroyList = new ArrayList<Mushroom>(); 
+  for(int i=0; i<shrooms.size();i++){
+    Mushroom m = shrooms.get(i);
     for(int j=0; j<bullets.size(); j++){
       Bullet b = bullets.get(j);
       if(m.bulletCollision(b)){
         bullets.remove(j);
         if(m.hit==2){
-          mushrooms.remove(i);
+          destroyList.add(m);
         }
       }
     }
     m.display();
     m.update();
+  }
+  
+  for(int i=0; i<destroyList.size(); i++){
+    shrooms.remove(destroyList.get(i));
   }
   
   cannon.display();
@@ -107,24 +122,28 @@ void keyReleased(){
 // Functions
 //---------------------------------------------------------- 
 
-// creates a random field of mushrooms on
+// creates a random field of shrooms on
 // a grid
-void generateMushrooms(){
-  int row = 39;
-  int col = 35;
+void generateshrooms(){
+  int row = 32;
+  int col = 30;
+  int spacing = 20;
   int xDiff = 10;
-  int yDiff = 20;
-  // creates a random grid of mushrooms
+  int yDiff = spacing*2;
+  //creates a random grid of shrooms
   for(int i=0; i<row;i++){
     for(int j =0; j<col; j++){
-      if(random(1)>.8){
-        Mushroom temp = new Mushroom(i+xDiff,j+yDiff);
-        mushrooms.add(temp);
+      if(random(1)>.85){
+        Mushroom temp = new Mushroom(xDiff,j+yDiff);
+        shrooms.add(temp);
+       // grid[i][j]= true;
+      } else {
+        //grid[i][j]= false;
       }
-      yDiff+=20;
+      yDiff += spacing;
     }
-    xDiff+=20;
-    yDiff = 20;
+    xDiff += spacing;
+    yDiff = spacing*2;
   }
 }
 

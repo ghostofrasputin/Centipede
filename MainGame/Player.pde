@@ -4,7 +4,6 @@
 
 class Player {
   private int x, y, size, speed;
-  private boolean rightFlag, leftFlag;
   
   Player(int x, int y){
     this.x = x;

@@ -22,6 +22,10 @@ class Mushroom {
     strokeWeight(3);
     switch(hit){
       case 0:
+        /*rectMode(CENTER);
+        fill(255);
+        rect(x,y,20,20);
+        rectMode(CORNER);*/
         fill(atomic_purple);
         arc(x, y, 15, 15, PI, TWO_PI);
         rect(x-3,y,5,7);
@@ -50,13 +54,13 @@ class Mushroom {
     //update collision info once when there's a hit
     switch(hit){
       case 0:
-        updateCollisionInfo(new int[]{x-3,y,5,7});
+        updateCollisionInfo(new int[]{x-10,y-10,20,20});
         break;
       case 1:
-        updateCollisionInfo(new int[]{x, y, 15, 15});
+        updateCollisionInfo(new int[]{x-10, y-10, 20, 20});
         break;
       case 2:
-       // updateCollisionInfo();
+        // updateCollisionInfo();
         break;
       case 3:
         //updateCollisionInfo();
