@@ -12,7 +12,6 @@
 // Global variables
 //----------------------------------------------------------
 boolean[] keys = {false, false, false};
-boolean[][] grid = new boolean[39][35];
 Player cannon = new Player(200,750);
 ArrayList<Bullet> bullets = new ArrayList<Bullet>();
 ArrayList<Mushroom> shrooms = new ArrayList<Mushroom>();
@@ -23,7 +22,7 @@ int levelNum = 0;
 int progress = 1;
 
 // Colors:
-//color red = 
+color atomic_pink = #F205C7;
 color atomic_blue = #0CB6F4;
 color atomic_purple = #FE08FF;
 color atomic_orange = #FF8C1F;
@@ -32,7 +31,7 @@ color atomic_orange = #FF8C1F;
 // Setup Function
 //---------------------------------------------------------- 
 void setup(){
-  size(650,800);
+  size(660,800);
 }
 
 //----------------------------------------------------------
@@ -125,25 +124,23 @@ void keyReleased(){
 // creates a random field of shrooms on
 // a grid
 void generateshrooms(){
-  int row = 32;
-  int col = 30;
+  int cols = 33; 
+  int rows = 40;
   int spacing = 20;
   int xDiff = 10;
-  int yDiff = spacing*2;
+  int yDiff = 10;
   //creates a random grid of shrooms
-  for(int i=0; i<row;i++){
-    for(int j =0; j<col; j++){
-      if(random(1)>.85){
-        Mushroom temp = new Mushroom(xDiff,j+yDiff);
+  for(int i=0; i<cols;i++){
+    for(int j =0; j<rows; j++){
+      boolean skipRows = (j>32 || j<2) ? true : false;
+      if(random(1)>.9 && !skipRows){
+        Mushroom temp = new Mushroom(xDiff,yDiff);
         shrooms.add(temp);
-       // grid[i][j]= true;
-      } else {
-        //grid[i][j]= false;
-      }
+      } 
       yDiff += spacing;
     }
     xDiff += spacing;
-    yDiff = spacing*2;
+    yDiff = 10;
   }
 }
 

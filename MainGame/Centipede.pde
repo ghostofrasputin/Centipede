@@ -6,14 +6,19 @@ class Centipede {
   
   ArrayList<Segment> segments;
   Segment head, middle;
+  int [] startPos = {0,(int)random(0,33)};
    
   Centipede(int cent_length){
-    //this.head = new Segment(0,50);
     this.segments = new ArrayList<Segment>();
-    int yDiff = 35;
+    int yDiff = 0;
     int spacing = 2;
     for(int i=0; i<cent_length; i++){
-      Segment segment = new Segment(322,yDiff);
+      Segment segment;
+      if(i==0){
+        segment = new Segment(322,yDiff,true);
+      } else {
+        segment = new Segment(322,yDiff,true);
+      }
       segments.add(segment);
       yDiff -= segment.h+spacing;
     }
@@ -33,6 +38,14 @@ class Centipede {
       Segment s = segments.get(i);
       s.update();
     }
+  }
+  
+  void calculatePath(){
+    
+  }
+  
+  void roamingBehavior(){
+  
   }
   
 }
