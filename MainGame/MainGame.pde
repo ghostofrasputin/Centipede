@@ -8,6 +8,8 @@
  *                                                         *
  ***********************************************************/
 
+import java.util.Map;
+
 //----------------------------------------------------------
 // Global variables
 //----------------------------------------------------------
@@ -26,6 +28,7 @@ color atomic_pink = #F205C7;
 color atomic_blue = #0CB6F4;
 color atomic_purple = #FE08FF;
 color atomic_orange = #FF8C1F;
+color atomic_green = #00FF46;
 
 //----------------------------------------------------------
 // Setup Function
@@ -72,7 +75,7 @@ void draw(){
     }
   }
   
-  ArrayList<Mushroom>destroyList = new ArrayList<Mushroom>(); 
+  ArrayList<Mushroom> destroyList = new ArrayList<Mushroom>(); 
   for(int i=0; i<shrooms.size();i++){
     Mushroom m = shrooms.get(i);
     for(int j=0; j<bullets.size(); j++){

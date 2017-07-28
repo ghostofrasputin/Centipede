@@ -5,63 +5,107 @@
 class Segment {
   private int x,y,w,h,speed;
   //private float[] goalPos;
-  private boolean isHead;
   private char dir = 's';
   private char lastDir = 'w';
   private int tracker = 0;
-  ArrayList<int[]> nodePoints = new ArrayList<int[]>();
+  private int legSize = 5;
+  private int ft1 = 0;
+  private int ft2 = 0;
   
-  Segment(int x,int y, boolean isHead){
+  Segment(int x,int y){
     this.x=x;
     this.y=y;
-    this.w = 15;
-    this.h = 15;
+    this.h = this.w = 15;
     this.speed = 3;
-    this.isHead = isHead;
-    //this.goalPos = new float[]{325,30};
   }
   
   void display(){
-    fill(atomic_orange);
-    //rectMode(CENTER);
+    //stroke(atomic_orange);
+    //strokeWeight(5);
+    fill(atomic_green);
     rect(x,y,w,h);
-    //rectMode(CORNER);
-  }
-  
-  void update(){
-    if(isHead){
+    int threshold = 10;
+    // Animate leg movement:
+    if(ft1<threshold){
       switch(dir){
         case 's':
-          y+=speed;
-          tracker++;
-          collisionCheck();
-          if(tracker == 10){
-            if(lastDir == 'w'){
-              dir = 'e';
-            }
-            if(lastDir == 'e'){
-              dir = 'w';
-            }
-            tracker = 0;
-          }
+          rect(x+15,y+10,legSize,legSize);
+          rect(x-5,y+10,legSize,legSize);
+          ft1++;
           break;
         case 'w':
-          x-=speed;
-          lastDir = 'w';
-          collisionCheck();
+          rect(x,y+15,legSize,legSize);
+          rect(x,y-5,legSize,legSize);
+          ft1++;
           break;
         case 'e':
-          x+=speed;
-          lastDir = 'e';
-          collisionCheck();
+          rect(x+10,y+15,legSize,legSize);
+          rect(x+10,y-5,legSize,legSize);
+          ft1++;
           break;
         default:
           break;
-      }  
+      }
     } else {
+      switch(dir){
+        case 's':
+          rect(x+15,y+5,legSize,legSize);
+          rect(x-5,y+5,legSize,legSize);
+          ft2++;
+          break;
+        case 'w':
+          rect(x+5,y+15,legSize,legSize);
+          rect(x+5,y-5,legSize,legSize);
+          ft2++;
+          break;
+        case 'e':
+          rect(x+5,y+15,legSize,legSize);
+          rect(x+5,y-5,legSize,legSize);
+          ft2++;
+          break;
+        default:
+          break;
+      }
+      if(ft2>threshold){
+        ft1 = 0;
+        ft2 = 0;
+      }
     }
   }
   
+  // update for head segment
+  void update(){
+    switch(dir){
+      case 's':
+        y+=speed;
+        tracker++;
+        collisionCheck();
+        if(tracker >= 7){
+          if(lastDir == 'w'){
+            dir = 'e';
+          }
+          if(lastDir == 'e'){
+            dir = 'w';
+          }
+          tracker = 0;
+        }
+        break;
+      case 'w':
+        x-=speed;
+        lastDir = 'w';
+        collisionCheck();
+        break;
+      case 'e':
+        x+=speed;
+        lastDir = 'e';
+        collisionCheck();
+        break;
+      default:
+        break;
+    }   
+  }
+  
+  // collision check for head:
   void collisionCheck(){
     // bounds collision:
     if(x<=0){
@@ -75,7 +119,7 @@ class Segment {
       Mushroom m = shrooms.get(i);
       if(dir == 's'){
         if(rectCollision(m.currentCollisionInfo,new int[]{x,y+5,w,h})){
-          tracker = 10;
+          tracker = 7;
           break;
         }
       }
