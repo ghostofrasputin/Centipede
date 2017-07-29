@@ -12,7 +12,7 @@ class Segment {
   private int ft1 = 0;
   private int ft2 = 0;
   int transitionThreshold = 10;
-  boolean poisonFlag;
+  boolean poisonFlag, bottomReached;
   
   Segment(int x,int y){
     this.x=x;
@@ -20,6 +20,7 @@ class Segment {
     this.h = this.w = 15;
     this.speed = 3;
     this.poisonFlag = false;
+    this.bottomReached = false;
   }
   
   void display(){
@@ -31,6 +32,11 @@ class Segment {
     // Animate leg movement:
     if(ft1<transitionThreshold){
       switch(dir){
+        case 'n':
+          rect(x+15,y,legSize,legSize);
+          rect(x-5,y,legSize,legSize);
+          ft1++;
+          break;
         case 's':
           rect(x+15,y+10,legSize,legSize);
           rect(x-5,y+10,legSize,legSize);
@@ -51,6 +57,11 @@ class Segment {
       }
     } else {
       switch(dir){
+        case 'n':
+          rect(x+15,y+5,legSize,legSize);
+          rect(x-5,y+5,legSize,legSize);
+          ft2++;
+          break;
         case 's':
           rect(x+15,y+5,legSize,legSize);
           rect(x-5,y+5,legSize,legSize);
@@ -79,13 +90,19 @@ class Segment {
   // update for head segment
   void update(){
     switch(dir){
+      case 'n':
+        y-=speed;
+        collisionCheck();
+        break;
       case 's':
         y+=speed;
+        tracker++;
+        collisionCheck();
+        // keep going south after
+        // poison mushroom hit:
         if(poisonFlag){
           break;
         }
-        tracker++;
-        collisionCheck();
         if(tracker >= 7){
           if(lastDir == 'w'){
             dir = 'e';
@@ -116,10 +133,28 @@ class Segment {
     // bounds collision:
     if(x<=0){
       dir = 's';
+      return;
     }
     if(x>=width-15){
       dir = 's';
+      return;
     }
+    
+    if(y>=height-15){
+      dir = 'n';
+      poisonFlag = false;
+      bottomReached = true;
+      return;
+    }
+    
+    // segments stay in player 
+    // movement zone area
+    if(bottomReached && y<=650){
+      dir = 's';
+      tracker = 0;
+      return;
+    }
+    
     // mushroom collision:
     for(int i=0; i<shrooms.size(); i++){
       Mushroom m = shrooms.get(i);
@@ -137,7 +172,7 @@ class Segment {
         if(rectCollision(m.currentCollisionInfo,new int[]{x+5,y,w,h})){
           if(m.poisonFlag){
             poisonFlag = true;
-            break;
+            //break;
           }
           dir = 's';
           break;
@@ -147,7 +182,7 @@ class Segment {
         if(rectCollision(m.currentCollisionInfo,new int[]{x-5,y,w,h})){
           if(m.poisonFlag){
             poisonFlag = true;
-            break;
+            //break;
           }
           dir = 's';
           break;

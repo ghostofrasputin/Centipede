@@ -58,12 +58,15 @@ void draw(){
   
   // For now spawn a scorpion every 300 frames
   if(frameCount%scorpionSpawnRate == 0){
-    s = new Scorpion(0,(int)random(100,500));  
-    //scorpionSpawnRate = (int)random(700, 800);
+     s = new Scorpion(0,(int)random(200,700)); 
+    scorpionSpawnRate += scorpionSpawnRate*2;
   }
+  //s = new Scorpion(500,500); 
   if(s!=null){
-    s.display();
-    s.update();
+    if(s.alive){
+      s.display();
+      s.update();
+    }
   }
   
   // fires bullets and maintains bullet spacing,
