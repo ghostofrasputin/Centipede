@@ -7,6 +7,7 @@ class Mushroom {
   private int hit;
   private int lastHit;
   private int[] currentCollisionInfo;
+  private boolean poisonFlag;
   
   Mushroom(int x, int y){
     this.x = x;
@@ -14,29 +15,39 @@ class Mushroom {
     this.hit = 0;
     this.lastHit = -1;
     currentCollisionInfo = new int[4];
+    this.poisonFlag = false;
   }
   
   void display(){
     // it takes 4 hits to destroy a mushroom
-    stroke(atomic_blue);
+    stroke(blue);
     strokeWeight(3);
+    if(poisonFlag){
+      stroke(red);
+    }
     switch(hit){
       case 0:
         /*rectMode(CENTER);
         fill(255);
         rect(x,y,20,20);
         rectMode(CORNER);*/
-        fill(atomic_purple);
+        fill(purple);
+        if(poisonFlag){
+          fill(green);
+        }
         arc(x, y, 15, 15, PI, TWO_PI);
         rect(x-3,y,5,7);
-        fill(atomic_blue);
+        //fill(blue);
         line(x-7,y,x+7,y);
         break;
       case 1:
-        fill(atomic_purple);
+        fill(purple);
+        if(poisonFlag){
+          fill(green);
+        }
         arc(x, y, 15, 15, PI, TWO_PI);
         //rect(x-3,y,5,7);
-        fill(atomic_blue);
+        fill(blue);
         line(x-7,y,x+7,y);
         break;
       case 2:
@@ -89,5 +100,8 @@ class Mushroom {
       return false;
     }
   }
-    
+   
+  void setPoisonFlag(){
+    poisonFlag = true;
+  }
 }

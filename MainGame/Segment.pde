@@ -1,5 +1,5 @@
 //----------------------------------------------------------
-// Segment
+// Segment class
 //---------------------------------------------------------- 
 
 class Segment {
@@ -11,22 +11,25 @@ class Segment {
   private int legSize = 5;
   private int ft1 = 0;
   private int ft2 = 0;
+  int transitionThreshold = 10;
+  boolean poisonFlag;
   
   Segment(int x,int y){
     this.x=x;
     this.y=y;
     this.h = this.w = 15;
     this.speed = 3;
+    this.poisonFlag = false;
   }
   
   void display(){
     //stroke(atomic_orange);
     //strokeWeight(5);
-    fill(atomic_green);
+    fill(green);
     rect(x,y,w,h);
-    int threshold = 10;
+    
     // Animate leg movement:
-    if(ft1<threshold){
+    if(ft1<transitionThreshold){
       switch(dir){
         case 's':
           rect(x+15,y+10,legSize,legSize);
@@ -66,7 +69,7 @@ class Segment {
         default:
           break;
       }
-      if(ft2>threshold){
+      if(ft2>transitionThreshold){
         ft1 = 0;
         ft2 = 0;
       }
@@ -78,6 +81,9 @@ class Segment {
     switch(dir){
       case 's':
         y+=speed;
+        if(poisonFlag){
+          break;
+        }
         tracker++;
         collisionCheck();
         if(tracker >= 7){
@@ -119,23 +125,34 @@ class Segment {
       Mushroom m = shrooms.get(i);
       if(dir == 's'){
         if(rectCollision(m.currentCollisionInfo,new int[]{x,y+5,w,h})){
+          if(m.poisonFlag){
+            poisonFlag = true;
+            break;
+          }
           tracker = 7;
           break;
         }
       }
       if(dir == 'e'){
         if(rectCollision(m.currentCollisionInfo,new int[]{x+5,y,w,h})){
+          if(m.poisonFlag){
+            poisonFlag = true;
+            break;
+          }
           dir = 's';
           break;
         }
       }
       if(dir == 'w'){
         if(rectCollision(m.currentCollisionInfo,new int[]{x-5,y,w,h})){
+          if(m.poisonFlag){
+            poisonFlag = true;
+            break;
+          }
           dir = 's';
           break;
         }
       } 
     }
   }
-  
 }

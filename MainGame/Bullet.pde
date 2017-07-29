@@ -16,7 +16,7 @@ class Bullet{
   }
   
   void display(){
-    fill(atomic_purple);
+    fill(purple);
     rect(x,y,w,h);
   }
   

@@ -8,13 +8,13 @@
  *                                                         *
  ***********************************************************/
 
-import java.util.Map;
-
 //----------------------------------------------------------
 // Global variables
 //----------------------------------------------------------
 boolean[] keys = {false, false, false};
 Player cannon = new Player(200,750);
+Scorpion s;
+int scorpionSpawnRate = 300;
 ArrayList<Bullet> bullets = new ArrayList<Bullet>();
 ArrayList<Mushroom> shrooms = new ArrayList<Mushroom>();
 ArrayList<Centipede> centipedes = new ArrayList<Centipede>();
@@ -24,11 +24,12 @@ int levelNum = 0;
 int progress = 1;
 
 // Colors:
-color atomic_pink = #F205C7;
-color atomic_blue = #0CB6F4;
-color atomic_purple = #FE08FF;
-color atomic_orange = #FF8C1F;
-color atomic_green = #00FF46;
+color pink = #F205C7;
+color red = #FF4B4B;
+color blue = #0CB6F4;
+color purple = #FE08FF;
+color orange = #FF8C1F;
+color green = #00FF46;
 
 //----------------------------------------------------------
 // Setup Function
@@ -53,6 +54,16 @@ void draw(){
     Centipede c = centipedes.get(i);
     c.display();
     c.update();
+  }
+  
+  // For now spawn a scorpion every 300 frames
+  if(frameCount%scorpionSpawnRate == 0){
+    s = new Scorpion(0,(int)random(100,500));  
+    //scorpionSpawnRate = (int)random(700, 800);
+  }
+  if(s!=null){
+    s.display();
+    s.update();
   }
   
   // fires bullets and maintains bullet spacing,
